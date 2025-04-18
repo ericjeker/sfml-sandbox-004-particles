@@ -15,9 +15,12 @@ FetchContent_MakeAvailable(SFML)
 file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 add_executable(main src/main.cpp
-        src/ParticleSystem.cpp
-        src/ParticleSystem.h
         src/Particles.h
-        src/Randomizer.h)
+        src/Randomizer.h
+        src/ParticleEmitter.cpp
+        src/ParticleEmitter.h
+        src/ParticleSystem.cpp
+        src/ParticleSystem.h)
+
 target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE SFML::Graphics)

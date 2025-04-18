@@ -10,6 +10,10 @@
 struct Particles
 {
     std::vector<sf::Vector2f> positions;
+    std::vector<sf::Vector2f> velocities;
+    std::vector<sf::Vector2f> scales;
+    std::vector<sf::Color> colors;
+
     std::vector<float> lifeTimes;
     std::vector<float> timeRemainder;
 };
