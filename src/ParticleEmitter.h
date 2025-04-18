@@ -19,7 +19,7 @@ public:
     void Update(const sf::Time &time);
 
     // Actually generate the particles and add them to the ParticleSystem
-    void Emit() const;
+    void Emit(const sf::Time &time);
 
     // Getters
     bool IsActive() const;
@@ -50,6 +50,8 @@ private:
         sf::Color endColor = sf::Color::Transparent;
         float minLifetime = 1.0f;
         float maxLifetime = 3.0f;
+        float minSpeed = 1.0f;
+        float maxSpeed = 2.0f;
     } _particleProps;
 
     struct
@@ -65,7 +67,7 @@ private:
         // Number of particle counts per emission
         unsigned int particlesPerEmission = 10;
         // How many times per second to emit particles
-        float emissionRate = 1.0f;
+        float emissionRate = 10.f;
     } _emitterProps;
 
     // ---------------------------------------------------------------------------------

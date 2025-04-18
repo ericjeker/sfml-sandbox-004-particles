@@ -1,9 +1,13 @@
 // Copyright (c) 2025 Eric Jeker. All rights reserved.
 
 #include "ParticleEmitter.h"
+
+#include <iostream>
+
 #include "ParticleSystem.h"
 #include "Randomizer.h"
 
+#include <bits/ostream.tcc>
 #include <random>
 
 std::random_device Randomizer::rd;
@@ -22,19 +26,34 @@ void ParticleEmitter::Update(const sf::Time &time)
     if (_active)
     {
         // Emit the Particles in the System
-        Emit();
+        Emit(time);
     }
 }
 
-void ParticleEmitter::Emit() const
+void ParticleEmitter::Emit(const sf::Time &time)
 {
-    // Spawn 10 particles every frame for the lifetime of the emitter
-    for (int i = 0; i < _emitterProps.particlesPerEmission; ++i)
+    // Use the emissionRate to determine if particles should be emitted
+    const float emissionInterval = 1.0f / _emitterProps.emissionRate;
+    _emissionAccumulator += time.asSeconds();
+
+    if (_emissionAccumulator >= emissionInterval)
     {
-        // Generate particles
-        _system.SpawnParticle(_emitterProps.position,
-                              Randomizer::RandomDirectionalVector(_emitterProps.direction, _emitterProps.angle),
-                              _particleProps.color, Randomizer::RandomFloat(0.5f, 2.0f));
+        // Calculate how many emissions should occur
+        const int emissionCount = static_cast<int>(_emissionAccumulator / emissionInterval);
+        _emissionAccumulator -= emissionCount * emissionInterval;
+
+        // Emit particles based on the calculated emission count
+        for (int e = 0; e < emissionCount; ++e)
+        {
+            for (int i = 0; i < _emitterProps.particlesPerEmission; ++i)
+            {
+                const auto velocity = Randomizer::RandomDirectionalVector(_emitterProps.direction, _emitterProps.angle) *
+                                Randomizer::RandomFloat(_particleProps.minSpeed, _particleProps.maxSpeed);
+                // Generate particles
+                _system.SpawnParticle(_emitterProps.position, velocity, _particleProps.color,
+                                      Randomizer::RandomFloat(0.5f, 2.0f));
+            }
+        }
     }
 }
 

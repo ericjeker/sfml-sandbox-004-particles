@@ -96,21 +96,24 @@ int main()
                 // Create ParticleEmitters and spawn them into the system
                 auto smoke = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
                 smoke->SetColor(DraculaColors::WHITE);
-                smoke->SetDuration(.12f);
+                smoke->SetDuration(1.f);
+                smoke->SetEmissionRate(5.f);
                 smoke->SetDirection(sf::Vector2f{0.f, -50.f});
-                smoke->SetParticlesPerEmission(100);
+                smoke->SetParticlesPerEmission(200);
                 particleSystem.SpawnEmitter(std::move(smoke));
                 auto fire = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
                 fire->SetColor(DraculaColors::PINK);
-                fire->SetDuration(.1f);
+                fire->SetDuration(1.f);
+                fire->SetEmissionRate(2.f);
                 fire->SetDirection(sf::Vector2f{0.f, -20.f});
-                fire->SetParticlesPerEmission(100);
+                fire->SetParticlesPerEmission(200);
                 particleSystem.SpawnEmitter(std::move(fire));
                 auto blast = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
                 blast->SetColor(DraculaColors::CYAN);
-                blast->SetDuration(.025f);
-                blast->SetDirection(sf::Vector2f{0.f, -200.f});
-                blast->SetParticlesPerEmission(100);
+                blast->SetDuration(1.f);
+                blast->SetEmissionRate(10.f);
+                blast->SetDirection(sf::Vector2f{0.f, -80.f});
+                blast->SetParticlesPerEmission(500);
                 particleSystem.SpawnEmitter(std::move(blast));
             }
         }

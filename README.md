@@ -22,7 +22,6 @@ be potentially achieved using the Builder pattern.
 
 ## To Do
 
-- [ ] The code in the ParticleEmitter::Emit() function doesn't yet respect the emission rate
 - [ ] Improve the randomization; it's currently uniform, using Gaussian/normal and/or Perlin noise
 - [ ] Allow effects like color transitions, size/scale, alpha fading
 - [ ] Add texture support, currently the ParticleSystem only supports points
@@ -41,6 +40,7 @@ be potentially achieved using the Builder pattern.
 - [ ] Particle chaining, anyone?
 - [ ] Implement particle interpolation for smoother visuals
 - [ ] Consider more optimizations like pool allocations, multi-threading, pre-allocation
+- [x] The code in the ParticleEmitter::Emit() function doesn't yet respect the emission rate
 - [x] Create a ParticleEmitter
 - [x] Make the ParticleSystem accept multiple ParticleEmitters
 - [x] Trigger the effect on mouse click
