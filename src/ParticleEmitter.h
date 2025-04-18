@@ -31,8 +31,10 @@ public:
     void SetDuration(const float &duration);
     void SetColor(const sf::Color &color);
     void SetActive(const bool &active);
-    void SetParticlesPerEmission(unsigned int count);
-    void SetEmissionRate(float emissionsPerSecond);
+    void SetParticlesPerEmission(const unsigned int &count);
+    void SetEmissionRate(const float &emissionsPerSecond);
+    void SetVelocity(const float &min, const float &max);
+    void SetLifetime(const float &min, const float &max);
 
 private:
     // A reference to the particle system where we'll emit particles
@@ -50,8 +52,9 @@ private:
         sf::Color endColor = sf::Color::Transparent;
         float minLifetime = 1.0f;
         float maxLifetime = 3.0f;
-        float minSpeed = 1.0f;
-        float maxSpeed = 2.0f;
+        // Initial velocity of the particle
+        float minVelocity = 1.0f;
+        float maxVelocity = 2.0f;
     } _particleProps;
 
     struct
@@ -59,7 +62,7 @@ private:
         // Position of the Emitter and direction of the emission
         sf::Vector2f position;
         // The direction in which the particles will be emitted
-        sf::Vector2f direction = sf::Vector2f(100.f, 100.f);
+        sf::Vector2f direction = sf::Vector2f(0.f, 0.f);
         // The angle of emission, in Radians
         float angle = 2 * M_PI;
         // The duration of the emission, in seconds

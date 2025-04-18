@@ -10,12 +10,11 @@
 #include <bits/ostream.tcc>
 #include <random>
 
-std::random_device Randomizer::rd;
-std::mt19937 Randomizer::gen(Randomizer::rd());
-
 ParticleEmitter::ParticleEmitter(ParticleSystem &system, const sf::Vector2f &position)
     : _system(system)
 {
+    // Randomizer::SetDistributionType(DistributionType::Gaussian);
+    // Randomizer::ResetNoiseIndex();
     _emitterProps.position = position;
 }
 
@@ -47,11 +46,14 @@ void ParticleEmitter::Emit(const sf::Time &time)
         {
             for (int i = 0; i < _emitterProps.particlesPerEmission; ++i)
             {
-                const auto velocity = Randomizer::RandomDirectionalVector(_emitterProps.direction, _emitterProps.angle) *
-                                Randomizer::RandomFloat(_particleProps.minSpeed, _particleProps.maxSpeed);
+                const auto direction =
+                        Randomizer::RandomDirectionalVector(_emitterProps.direction, _emitterProps.angle).normalized() *
+                        Randomizer::RandomFloat(_particleProps.minVelocity, _particleProps.maxVelocity);
+
+                const float lifeTime = Randomizer::RandomFloat(_particleProps.minLifetime, _particleProps.maxLifetime);
+
                 // Generate particles
-                _system.SpawnParticle(_emitterProps.position, velocity, _particleProps.color,
-                                      Randomizer::RandomFloat(0.5f, 2.0f));
+                _system.SpawnParticle(_emitterProps.position, direction, _particleProps.color, lifeTime);
             }
         }
     }
@@ -67,6 +69,16 @@ bool ParticleEmitter::IsActive() const { return _active; }
 // Setters
 //
 
+void ParticleEmitter::SetVelocity(const float &min, const float &max)
+{
+    _particleProps.minVelocity = min;
+    _particleProps.maxVelocity = max;
+}
+void ParticleEmitter::SetLifetime(const float &min, const float &max)
+{
+    _particleProps.minLifetime = min;
+    _particleProps.maxLifetime = max;
+}
 void ParticleEmitter::SetPosition(const sf::Vector2f &position) { _emitterProps.position = position; }
 void ParticleEmitter::SetDirection(const sf::Vector2f &direction) { _emitterProps.direction = direction; }
 void ParticleEmitter::SetAngle(const float &angle) { _emitterProps.angle = angle; }
@@ -81,8 +93,8 @@ void ParticleEmitter::SetActive(const bool &active)
     _active = active;
     _timeElapsed = 0.f;
 }
-void ParticleEmitter::SetParticlesPerEmission(const unsigned int count) { _emitterProps.particlesPerEmission = count; }
-void ParticleEmitter::SetEmissionRate(const float emissionsPerSecond)
+void ParticleEmitter::SetParticlesPerEmission(const unsigned int &count) { _emitterProps.particlesPerEmission = count; }
+void ParticleEmitter::SetEmissionRate(const float &emissionsPerSecond)
 {
     _emitterProps.emissionRate = emissionsPerSecond;
     _emissionAccumulator = 0.f;

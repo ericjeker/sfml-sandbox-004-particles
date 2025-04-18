@@ -124,3 +124,8 @@ void ParticleSystem::UpdateVertices()
 
 
 void ParticleSystem::Render(sf::RenderWindow &target) const { target.draw(_vertices); }
+
+unsigned long long ParticleSystem::GetNumberOfParticles() const
+{
+    return _particles.positions.size();
+}

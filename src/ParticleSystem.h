@@ -34,6 +34,8 @@ public:
     // Render function with render target
     void Render(sf::RenderWindow &target) const;
 
+    unsigned long long GetNumberOfParticles() const;
+
 private:
     // Boundaries, outside them the particles are killed
     const unsigned _screenWidth;

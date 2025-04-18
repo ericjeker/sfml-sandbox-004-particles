@@ -47,11 +47,15 @@ int main()
     fpsText.setCharacterSize(10);
     fpsText.setFillColor(DraculaColors::WHITE);
     fpsText.setPosition({20.f, 20.f});
+    auto nbrParticlesText = sf::Text(font);
+    nbrParticlesText.setCharacterSize(10);
+    nbrParticlesText.setFillColor(DraculaColors::WHITE);
+    nbrParticlesText.setPosition({20.f, 42.f});
 
     // FPS Text background
-    sf::RectangleShape fpsTextBackground(sf::Vector2f(80.f, 30.f));
-    fpsTextBackground.setFillColor(DraculaColors::WithAlpha(DraculaColors::WHITE, 28));
-    fpsTextBackground.setPosition({10.f, 10.f});
+    sf::RectangleShape debugTextBackground(sf::Vector2f(120.f, 62.f));
+    debugTextBackground.setFillColor(DraculaColors::WithAlpha(DraculaColors::WHITE, 28));
+    debugTextBackground.setPosition({10.f, 10.f});
 
     // Refresh the text every second so it's readable
     float fpsRefresh = 1.f;
@@ -96,24 +100,48 @@ int main()
                 // Create ParticleEmitters and spawn them into the system
                 auto smoke = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
                 smoke->SetColor(DraculaColors::WHITE);
-                smoke->SetDuration(1.f);
+                smoke->SetDuration(5.f);
                 smoke->SetEmissionRate(5.f);
-                smoke->SetDirection(sf::Vector2f{0.f, -50.f});
+                smoke->SetDirection(sf::Vector2f{0.f, 0.f});
+                smoke->SetVelocity(5.f, 10.f);
+                smoke->SetLifetime(2.f, 5.f);
                 smoke->SetParticlesPerEmission(200);
                 particleSystem.SpawnEmitter(std::move(smoke));
+                auto yellow = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
+                yellow->SetColor(DraculaColors::YELLOW);
+                yellow->SetDuration(.5f);
+                yellow->SetEmissionRate(5.f);
+                yellow->SetDirection(sf::Vector2f{0.f, 0.f});
+                yellow->SetVelocity(1.f, 50.f);
+                yellow->SetLifetime(.1f, .5f);
+                yellow->SetParticlesPerEmission(200);
+                particleSystem.SpawnEmitter(std::move(yellow));
+                auto orange = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
+                orange->SetColor(DraculaColors::ORANGE);
+                orange->SetDuration(.5f);
+                orange->SetEmissionRate(3.f);
+                orange->SetDirection(sf::Vector2f{0.f, 0.f});
+                orange->SetVelocity(1.f, 50.f);
+                orange->SetLifetime(.1f, .5f);
+                orange->SetParticlesPerEmission(200);
+                particleSystem.SpawnEmitter(std::move(orange));
                 auto fire = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
                 fire->SetColor(DraculaColors::PINK);
-                fire->SetDuration(1.f);
-                fire->SetEmissionRate(2.f);
-                fire->SetDirection(sf::Vector2f{0.f, -20.f});
+                fire->SetDuration(.1f);
+                fire->SetEmissionRate(100.f);
+                fire->SetDirection(sf::Vector2f{0.f, 0.f});
+                fire->SetVelocity(1.f, 50.f);
+                fire->SetLifetime(.1f, .5f);
                 fire->SetParticlesPerEmission(200);
                 particleSystem.SpawnEmitter(std::move(fire));
                 auto blast = std::make_unique<ParticleEmitter>(particleSystem, vector2F);
                 blast->SetColor(DraculaColors::CYAN);
-                blast->SetDuration(1.f);
-                blast->SetEmissionRate(10.f);
-                blast->SetDirection(sf::Vector2f{0.f, -80.f});
-                blast->SetParticlesPerEmission(500);
+                blast->SetDuration(1.f / 100.f);
+                blast->SetEmissionRate(1000.f);
+                blast->SetDirection(sf::Vector2f{0.f, 0.f});
+                blast->SetVelocity(495.f, 505.f);
+                blast->SetLifetime(1.f, 2.f);
+                blast->SetParticlesPerEmission(3000);
                 particleSystem.SpawnEmitter(std::move(blast));
             }
         }
@@ -123,6 +151,9 @@ int main()
 
         // This is where "everything" happens
         particleSystem.Update(time);
+
+        // Refresh the debug
+        nbrParticlesText.setString("Particles: " + std::to_string(particleSystem.GetNumberOfParticles()));
 
         // Refresh the FPS debug text
         if (fpsRefresh <= 0.f)
@@ -146,8 +177,9 @@ int main()
         particleSystem.Render(window);
 
         // Render the FPS text
-        window.draw(fpsTextBackground);
+        window.draw(debugTextBackground);
         window.draw(fpsText);
+        window.draw(nbrParticlesText);
 
         window.display();
     }
